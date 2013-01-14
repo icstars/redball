@@ -2,17 +2,17 @@
 <head>
 <style>
 #leftpaddle{
-  width: 10px;
-	height: 150px;
+	width: 10px;
+	height: 50px;
 	background-color: black;
 	position: absolute;
-	left: 125px;
+	left: 175px;
 }
 
 
 </style>
-<!-- jquery ui css -->
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" type="text/css" media="all" />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" type="text/css" media="all" />
+
 </head>
 <body>
 <div id="dialog-modal" title="High scores to date!">
@@ -28,41 +28,57 @@
     </thead>
   </table>
 </div>
- 
+
 Left Team:<div id="leftteam"></div>
 Right Team:<div id="rightteam"></div>
 <img src="http://icstars.org/files/redball.jpg" id="redball"/>
 
 <!-- jquery and datatables -->
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 <script class="jsbin" src="http://datatables.net/download/build/jquery.dataTables.nightly.js"></script>
 
-<script type='text/javascript' src='http://lrn.icstars.org/redball4.js'></script>
-
 <script>
-//show the dialog right away
- $(function() {
+//build the dialog 
     $( "#dialog-modal" ).dialog({
+      autoOpen: true,
       height: 600,
       width: 800,
-      modal: true
+      modal: true,
+      close: function (event, ui) {
+        start_bouncing();
+      }
     });
     
-  });
 //populate the table with data from the server php file  
  $(document).ready(function() {
       $('#highscores').dataTable( {
           "bProcessing": true,
           "bServerSide": true,
+          "bPaginate": false,
+          "bLengthChange": false,
+          "bFilter": false,
+          "bSort": false,
+          "bInfo": false,
+          "bAutoWidth": true,
           "sAjaxSource": "highscores.php"
       } );
   } );
-
 </script>
 
 <script type='text/javascript'>
-
+// requestAnim shim layer by Paul Irish
+    window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       || 
+              window.webkitRequestAnimationFrame || 
+              window.mozRequestAnimationFrame    || 
+              window.oRequestAnimationFrame      || 
+              window.msRequestAnimationFrame     || 
+              function(/* function */ callback, /* DOMElement */ element){
+                window.setTimeout(callback, 1000 / 60);
+              };
+    })();
+  
 window.onmousemove= function(){
 	leftbar.style.top = event.clientY + 'px';
 	leftbar.top = event.clientY;
@@ -77,7 +93,7 @@ window.onload = function(){
 	rightscore = document.getElementById("rightscore");
 	leftteam.resetscore();
 	rightteam.resetscore();
-	leftbar.left = 125;
+	leftbar.left = 175;
 	
 }
 
@@ -89,6 +105,9 @@ leftteam.resetscore = function(){
 leftteam.score = function(){
 	leftteam.value = leftteam.value + 1;
 	leftteam.innerHTML = leftteam.value;
+  redball.dx = redball.dx * 1.07;
+  redball.dy = redball.dy * 1.07;
+  
 }
 
 rightteam.resetscore = function(){
@@ -99,6 +118,11 @@ rightteam.resetscore = function(){
 rightteam.score = function(){
 	rightteam.value = rightteam.value + 1;
 	rightteam.innerHTML = rightteam.value;
+  if ((rightteam.value + leftteam.value)> 10){
+    stop_bouncing();
+    $( "#dialog-name" ).dialog( "open" );
+  }
+    
 }
 
 function animate() {    
@@ -115,11 +139,13 @@ redball.draw = function(){
 function start_bouncing(){
 	redball.left = 500;
 	redball.top = 100;
-	redball.dx = -10;
-	redball.dy = 10;
+	redball.dx = -25;
+	redball.dy = 25;
 	animate();
 }
 function stop_bouncing(){
+  redball.left = 500;
+  redball.top = 100;
 	redball.dx = 0;
 	redball.dy = 0;
 }
@@ -179,8 +205,7 @@ function log(msg){
 }
 
 </script> 
-<button onclick="start_bouncing();">start bouncing</button>
-<button onclick="stop_bouncing();">stop bouncing</button>
+<button onclick="stop_bouncing();">quit</button>
 <img id="leftpaddle"/>
 <div id="log">Log</div>
 </body>
