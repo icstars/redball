@@ -1,0 +1,188 @@
+<html>
+<head>
+<style>
+#leftpaddle{
+  width: 10px;
+	height: 150px;
+	background-color: black;
+	position: absolute;
+	left: 125px;
+}
+
+
+</style>
+<!-- jquery ui css -->
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/ui-lightness/jquery-ui.css" type="text/css" media="all" />
+</head>
+<body>
+<div id="dialog-modal" title="High scores to date!">
+  <p>Good luck!</p>
+  <table cellpadding="0" cellspacing="0" border="0" class="display" id="highscores">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>user</th>
+        <th>score</th>
+        <th>date</th>
+      </tr>
+    </thead>
+  </table>
+</div>
+ 
+Left Team:<div id="leftteam"></div>
+Right Team:<div id="rightteam"></div>
+<img src="http://icstars.org/files/redball.jpg" id="redball"/>
+
+<!-- jquery and datatables -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
+<script class="jsbin" src="http://datatables.net/download/build/jquery.dataTables.nightly.js"></script>
+
+<script type='text/javascript' src='http://lrn.icstars.org/redball4.js'></script>
+
+<script>
+//show the dialog right away
+ $(function() {
+    $( "#dialog-modal" ).dialog({
+      height: 600,
+      width: 800,
+      modal: true
+    });
+    
+  });
+//populate the table with data from the server php file  
+ $(document).ready(function() {
+      $('#highscores').dataTable( {
+          "bProcessing": true,
+          "bServerSide": true,
+          "sAjaxSource": "highscores.php"
+      } );
+  } );
+
+</script>
+
+<script type='text/javascript'>
+
+window.onmousemove= function(){
+	leftbar.style.top = event.clientY + 'px';
+	leftbar.top = event.clientY;
+	log('clientX:'+event.clientX + ' clientY:'+event.clientY);
+	
+}
+
+window.onload = function(){
+	redball = document.getElementById("redball");	
+	leftbar = document.getElementById("leftpaddle");
+	leftteam = document.getElementById("leftteam");
+	rightscore = document.getElementById("rightscore");
+	leftteam.resetscore();
+	rightteam.resetscore();
+	leftbar.left = 125;
+	
+}
+
+leftteam.resetscore = function(){
+	leftteam.value = 0;
+	leftteam.innerHTML = "0";
+}
+
+leftteam.score = function(){
+	leftteam.value = leftteam.value + 1;
+	leftteam.innerHTML = leftteam.value;
+}
+
+rightteam.resetscore = function(){
+	rightteam.value = 0;
+	rightteam.innerHTML = "0";
+}
+
+rightteam.score = function(){
+	rightteam.value = rightteam.value + 1;
+	rightteam.innerHTML = rightteam.value;
+}
+
+function animate() {    
+    requestAnimFrame( animate );
+    update_ball();
+}
+
+redball.draw = function(){
+ 	redball.style.position = 'absolute';
+    redball.style.left = redball.left +'px';
+    redball.style.top = redball.top +'px';
+}
+
+function start_bouncing(){
+	redball.left = 500;
+	redball.top = 100;
+	redball.dx = -10;
+	redball.dy = 10;
+	animate();
+}
+function stop_bouncing(){
+	redball.dx = 0;
+	redball.dy = 0;
+}
+
+function update_ball(){
+//	log('updateball - ' + redball.left + ', ' + redball.top + ' dx: ' + redball.dx + ' dy: ' + redball.dy);	
+	var right = redball.left + redball.width;
+	var bottom = redball.top + redball.height;
+	//log ('rb width: ' + redball.width);
+	
+	//hit right wall
+	if (screen.width < right){
+		redball.dx = -redball.dx;		
+		leftteam.score();
+	}
+	
+	//hit bottom
+	else if (screen.height < bottom){
+		redball.dy = -redball.dy;
+	}
+	
+	//hit left wall
+	else if (redball.left < 0){
+		redball.dx = -redball.dx;
+		//add score for right team
+		rightteam.score();
+	}
+	
+	//hit top wall
+	else if (redball.top < 0){
+		redball.dy = -redball.dy;
+	}
+	
+	//log('(redball.left + redball.dx):' + (redball.left + redball.dx) + ', leftbar.left:' + (leftbar.left)+ ', leftbar.width:' + (leftbar.width));
+	
+	//the ball is or is about to cross the vertical plane of the left paddle
+	if ((redball.left + redball.dx) <= (leftbar.left + leftbar.width)){
+		//check if the bottom of the ball is lower than the top of the paddle
+		if(redball.top+redball.height >= leftbar.top){
+			//check if the top of the ball is above the bottom of the paddle
+			if(redball.top <= (leftbar.top+leftbar.height)){
+				//paddle hit!!
+				redball.dx = -redball.dx;
+			}
+		}
+	}
+	
+	redball.left = redball.left + redball.dx;
+	redball.top = redball.top + redball.dy;
+	redball.draw();
+}
+
+
+
+function log(msg){
+	document.getElementById('log').innerHTML = msg;
+}
+
+</script> 
+<button onclick="start_bouncing();">start bouncing</button>
+<button onclick="stop_bouncing();">stop bouncing</button>
+<img id="leftpaddle"/>
+<div id="log">Log</div>
+</body>
+
+</html>
