@@ -8,14 +8,14 @@ $db = 'icstars_redball';
   } else {
     mysql_select_db($db, $link);
     $query = <<<SQL
-select * from highscore;
+select * from highscore order by thedate desc;
 SQL;
 
     $result = mysql_query($query, $link);
   }
   
     $output = array(
-  	"aaData" => array()
+		"aaData" => array()
 	);
   
 $aColumns = array( 'id', 'username', 'score', 'thedate');
