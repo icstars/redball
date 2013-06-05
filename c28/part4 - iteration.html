@@ -1,0 +1,112 @@
+<html>
+<head>
+	<style>
+	.console td button{
+		background-color: black;
+		color: white;
+		width: 50px;
+
+	}
+	</style>
+<script type = 'text/javascript' src='http://lrn.icstars.org/redball.js'></script>
+<script type = 'text/javascript'>
+function moveup(howmany){
+	for (var i=1;i<=howmany;i++){
+		redball.top = redball.top -10;
+	}
+}
+function movedown(howmany){
+	for (var i=1;i<=howmany;i++){
+		redball.top = redball.top +10;
+	}
+}
+function moveleft(howmany){
+	for (var i=1;i<=howmany;i++){
+		redball.left = redball.left -10;
+	}
+}
+function moveright(howmany){
+	for (var i=1;i<=howmany;i++){
+		redball.left = redball.left +10;
+	}
+}
+function moveupright(howmany){
+	for (var i=1;i<=howmany;i++){
+		moveup(1);
+		moveright(1);
+	}
+}
+function movedownright(howmany){
+	for (var i=1;i<=howmany;i++){
+		movedown(1);
+		moveright(1);
+	}
+}
+function moveupleft(howmany){
+	for (var i=1;i<=howmany;i++){
+		moveup(1);
+		moveleft(1);
+	}
+}
+function movedownleft(howmany){
+	for (var i=1;i<=howmany;i++){
+		movedown(1);
+		moveleft(1);
+	}
+}
+function square(){
+	movedown(4);
+
+	moveright(4);
+
+	moveup(4);
+
+	moveleft(4);
+}
+
+function triangle(){
+	movedownleft(4);
+
+	moveright(8);
+
+	moveupleft(4);
+
+}
+
+function diamond(){
+	movedownleft(4);
+
+	movedownright(4);
+
+	moveupright(4);
+
+	moveupleft(4);
+}
+</script>
+
+</head>
+<body>
+<table class="console">
+	<tr>
+		<td><button onclick="moveupleft(1)")>UL</button></td>
+		<td><button onclick="moveup(1)")>UP</button></td>
+		<td><button onclick="moveupright(1)")>UR</button></td>
+	</tr>
+	<tr>
+		<td><button onclick="moveleft(1)")>L</button></td>
+		<td></td>
+		<td><button onclick="moveright(1)")>R</button></td>
+	</tr>
+	<tr>
+		<td><button onclick="movedownleft(1)")>DL</button></td>
+		<td><button onclick="movedown(1)")>DN</button></td>
+		<td><button onclick="movedownright(1)")>DR</button></td>
+	</tr>
+</table>
+<button onclick="square()">square</button>
+<button onclick="triangle()">triangle</button>
+<button onclick="diamond()">diamond</button>
+
+<img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
+</body>
+</html>

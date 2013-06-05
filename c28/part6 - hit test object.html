@@ -20,7 +20,6 @@ top: 100px;
 
 </head>
 <body>
-type = 'text/javascript' src='http://lrn.icstars.org/redball.js'
 <div id='log'></div>
 <img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
 <div id='wall'></div>
@@ -67,32 +66,13 @@ function AnimationObject(cssid){
     this._dx = dx;
     this._dy = dy;
     var hit = this.wallhit();
-    var objpos = $(cssid).offset();
-    objpos.left = objpos.left + this._dx;
-    objpos.top = objpos.top + this._dy;
-    $(cssid).css({ top: objpos.top+'px', left: objpos.left+'px' });
-    console.log ('moving: ' + cssid + ' dx: ' + dx + ' dy: ' + dy);
-  };
-  this.screenhit = function (dx, dy){
-    var hit = false;
-    var pos = $(cssid).offset();
-    var width = $(cssid).width();
-    var height = $(cssid).height();
-    var left = pos.left;
-    var top = pos.top;
-    var right = left + width;
-    var bottom = top + height;
-    
-    var potential_left = left + dx;
-    if (potential_left < 0){
-      hit = true;
+    if (!hit){
+      var objpos = $(cssid).offset();
+      objpos.left = objpos.left + this._dx;
+      objpos.top = objpos.top + this._dy;
+      $(cssid).css({ top: objpos.top+'px', left: objpos.left+'px' });
+      console.log ('moving: ' + cssid + ' dx: ' + dx + ' dy: ' + dy);
     }
-    var potential_top = top + dy;
-    if (potential_top < 0){
-      hit = true;
-    }
-    return hit;
-    
   };
   
   this.wallhit = function (){
@@ -119,19 +99,7 @@ function AnimationObject(cssid){
       hit = true;
       console.log ('hit');
     }
-    if (hit == true){
-      //left side
-      if(ballleft < wallleft && balltop > walltop && ballbottom < wallbottom){
-        this._dx = -this._dx;
-        console.log ('left side');
-      }
-      //right side
-      if(ballright > wallright && balltop > walltop && ballbottom < wallbottom){
-        this._dx = -this._dx;
-        console.log ('right side');
-      }
     
-    }
     //is the ball bottom about to hit the wall top
     return hit;
   };

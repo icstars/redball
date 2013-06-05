@@ -23,14 +23,32 @@ function AnimationObject(cssid){
     var pos = $(cssid).offset();
     pos.left = pos.left + dx;
     pos.top = pos.top + dy;
+    if(pos.left < 0){
+        //bumped left side of screen
+        pos.left = pos.left - dx;
+    }
     $(cssid).css({ top: pos.top+'px', left: pos.left+'px' });
   }
-}
+  
+  this.screenedgetest = function(){
+    var hit = false;
 
-function moveright(){
-  var pos = $("#redball").offset();
-  pos.left = pos.left + 20;
-  $("#redball").css({ top: pos.top+'px', left: pos.left+'px' });
+    var pos = $(cssid).offset();
+    var width = $(cssid).width();
+    var height = $(cssid).height();
+    var left = pos.left;
+    var top = pos.top;
+    var right = left + width;
+    
+    if (left < 0){
+      hit = true;
+    }
+    if (right > screen.width){
+      hit = true;
+    }
+    return hit;
+  }
+
 }
 
 var me = new myfirstobject();
@@ -40,7 +58,6 @@ var redballobj = new AnimationObject("#redball");
 </head>
 <body>
 <img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
-<button onclick="moveright();">move right</button>
 <button onclick="me.sayhello();">say hello</button>
 <button onclick="redballobj.whoareyou();">who are you?</button>
 <button onclick="redballobj.move(10, 10);">move down right</button>

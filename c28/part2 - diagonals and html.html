@@ -1,0 +1,68 @@
+<html>
+<head>
+	<style>
+	.console td button{
+		background-color: black;
+		color: white;
+		width: 50px;
+
+	}
+	</style>
+<script type = 'text/javascript' src='http://lrn.icstars.org/redball.js'></script>
+<script type = 'text/javascript'>
+function moveup(){
+	redball.top = redball.top -10;
+}
+function movedown(){
+	redball.top = redball.top +10;
+}
+function moveleft(){
+	redball.left = redball.left -10;
+}
+function moveright(){
+	redball.left = redball.left +10;
+}
+function moveupright(){
+	moveup();
+	moveright();
+}
+function movedownright(){
+	movedown();
+	moveright();
+}
+function moveupleft(){
+	moveup();
+	moveleft();
+}
+function movedownleft(){
+	movedown();
+	moveleft();
+}
+
+
+
+</script>
+
+</head>
+<body>
+<table class="console">
+	<tr>
+		<td><button onclick="moveupleft()")>UL</button></td>
+		<td><button onclick="moveup()")>UP</button></td>
+		<td><button onclick="moveupright()")>UR</button></td>
+	</tr>
+	<tr>
+		<td><button onclick="moveleft()")>L</button></td>
+		<td></td>
+		<td><button onclick="moveright()")>R</button></td>
+	</tr>
+	<tr>
+		<td><button onclick="movedownleft()")>DL</button></td>
+		<td><button onclick="movedown()")>DN</button></td>
+		<td><button onclick="movedownright()")>DR</button></td>
+	</tr>
+</table>
+
+<img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
+</body>
+</html>

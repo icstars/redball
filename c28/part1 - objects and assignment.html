@@ -1,0 +1,31 @@
+<html>
+<head>
+<script type = 'text/javascript' src='http://lrn.icstars.org/redball.js'></script>
+<script type = 'text/javascript'>
+function sayhelloworld(){
+  alert ('hello world from in a function');
+}
+function moveup(){
+	redball.top = redball.top -10;
+}
+function movedown(){
+	redball.top = redball.top +10;
+}
+function moveleft(){
+	redball.left = redball.left -10;
+}
+function moveright(){
+	redball.left = redball.left +10;
+}
+</script>
+
+</head>
+<body>
+<button onclick="sayhelloworld();">say hi</button>
+<button onclick="moveup()")>Move Up</button>
+<button onclick="movedown()")>Move Down</button>
+<button onclick="moveleft()")>Move Left</button>
+<button onclick="moveright()")>Move Right</button>
+<img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
+</body>
+</html>
