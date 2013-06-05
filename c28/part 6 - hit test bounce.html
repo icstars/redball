@@ -1,0 +1,210 @@
+<html>
+<head>
+<style>
+#wall{
+position: absolute;
+width: 100px;
+height: 100px;
+left: 200px;
+top: 175px;
+background-color: black;
+}
+#redball{
+position: absolute;
+left: 90px;
+top: 100px;
+}
+</style>
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+
+</head>
+<body>
+<div id='log'></div>
+<img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
+<div id='wall'></div>
+<button onclick="moveright();">move right</button>
+<button onclick="moveleft();">move left</button>
+<button onclick="movedown();">move down</button>
+<button onclick="moveup();">move up</button>
+<script>
+
+var thegame;
+var wallobj;
+var redballobj;
+
+$(document).ready(function(){
+  thegame = new Game();
+  wallobj = new ObstacleObject("#wall");
+  redballobj = new AnimationObject("#redball");
+});
+
+function Game(){
+  this.hittest = function (obj1, obj2){
+
+      var hit = false;
+      var retval = 'nohit';      
+      var ballleft = obj1.left() + obj1.dx;
+      var balltop = obj1.top() + obj1.dy;
+      var ballright = obj1.right() + obj1.dx;
+      var ballbottom = obj1.bottom() + obj1.dy;
+
+      var wallleft = obj2.left();
+      var walltop = obj2.top();
+      var wallright = obj2.right();
+      var wallbottom = obj2.bottom();
+    
+       //is the ball right about to hit the wall left
+      if(ballright > wallleft && ballbottom > walltop && balltop < wallbottom && ballleft < wallright){
+        hit = true;
+      }
+      // see this article for discussion of the algorithm to figure out which side was hit:
+      //http://stackoverflow.com/questions/4045159/collision-detection-on-a-rectangle-how-to-know-which-side-was-hit
+      //we could get more specific and return top, bottom, left, right, but for now this is all we need
+      if (hit==true){
+        console.log(obj1.center.x);  
+        console.log(obj1.center.y);  
+        if(Math.abs(obj1.center.x - obj2.center.x) >= Math.abs(obj1.center.y - obj2.center.y)){
+          retval = 'leftorright';
+        }
+        else{
+          retval = 'toporbottom';
+        }
+      }
+      console.log (retval);
+      return retval;
+  }
+}
+
+function Point(){
+  var x;
+  var y;
+}
+
+function AnimationObject(cssid){
+  var dx;
+  var dy;
+
+  this.__defineGetter__("center", function(){
+    var centerpoint = new Point();
+    var objpos = $(cssid).offset();
+    var left = objpos.left;
+    var top = objpos.top;
+    var width = $(cssid).width();
+    var height = $(cssid).height();
+    centerpoint.x = left + (width / 2);
+    centerpoint.y = top + (height / 2);
+    return centerpoint;
+  });
+
+  this.left = function(){
+    var objpos = $(cssid).offset();
+    console.log (cssid +'.left()=> ' + objpos.left);
+    return objpos.left;
+  };
+
+  this.right = function(){
+    var objpos = $(cssid).offset();
+    var left = objpos.left;
+    var width = $(cssid).width();
+    var right = left + width;
+    console.log (cssid +'.right()=> ' + right);
+    return right;
+  };
+
+  this.top = function(){
+    var objpos = $(cssid).offset();
+    console.log (cssid +'.top()=> ' + objpos.top);
+    return objpos.top;
+  };
+
+  this.bottom = function(){
+    var objpos = $(cssid).offset();
+    var height = $(cssid).height();
+    var bottom = objpos.top + height;
+    console.log (cssid +'.bottom()=> ' + bottom);
+    return bottom;
+  };
+  
+  this.move = function(dx, dy){
+    this.dx = dx;
+    this.dy = dy;
+    var hit = thegame.hittest(this, wallobj);
+    if (hit=='leftorright'){
+      this.dx = -(this.dx);
+    }
+    else if (hit=='toporbottom'){
+      this.dy = -(this.dy);
+    }
+
+    var objpos = $(cssid).offset();
+    objpos.left = objpos.left + this.dx;
+    objpos.top = objpos.top + this.dy;
+    $(cssid).css({ top: objpos.top+'px', left: objpos.left+'px' });
+    console.log ('moving: ' + cssid + ' dx: ' + dx + ' dy: ' + dy);
+
+  };
+}
+
+
+function ObstacleObject(cssid){
+  this.left = function(){
+    var objpos = $(cssid).offset();
+    console.log (cssid +'.left()=> ' + objpos.left);
+    return objpos.left;
+  };
+
+  this.right = function(){
+    var objpos = $(cssid).offset();
+    var left = objpos.left;
+    var width = $(cssid).width();
+    var right = left + width;
+    console.log (cssid +'.right()=> ' + right);
+    return right;
+  };
+
+  this.top = function(){
+    var objpos = $(cssid).offset();
+    console.log (cssid +'.top()=> ' + objpos.top);
+    return objpos.top;
+  };
+
+  this.bottom = function(){
+    var objpos = $(cssid).offset();
+    var height = $(cssid).height();
+    var bottom = objpos.top + height;
+    console.log (cssid +'.bottom()=> ' + bottom);
+    return bottom;
+  };
+  this.__defineGetter__("center", function(){
+    var centerpoint = new Point();
+    var objpos = $(cssid).offset();
+    var left = objpos.left;
+    var top = objpos.top;
+    var width = $(cssid).width();
+    var height = $(cssid).height();
+    centerpoint.x = left + (width / 2);
+    centerpoint.y = top + (height / 2);
+    return centerpoint;
+  });
+
+}
+
+function moveright(){
+  redballobj.move(40,0);
+}
+
+function moveleft(){
+  redballobj.move(-40,0);
+}
+
+function movedown(){
+  redballobj.move(0,40);
+}
+function moveup(){
+  redballobj.move(0,-40);
+}
+
+</script>
+
+</body>
+</html>

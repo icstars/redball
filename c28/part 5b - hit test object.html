@@ -1,0 +1,192 @@
+<html>
+
+<head>
+<style>
+#wall{
+position: absolute;
+width: 100px;
+height: 100px;
+left: 200px;
+top: 175px;
+background-color: black;
+}
+#redball{
+position: absolute;
+left: 90px;
+top: 100px;
+}
+</style>
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+
+</head>
+<body>
+type = 'text/javascript' src='http://lrn.icstars.org/redball.js'
+<div id='log'></div>
+<img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
+<div id='wall'></div>
+<button onclick="moveright();">move right</button>
+<button onclick="moveleft();">move left</button>
+<button onclick="movedown();">move down</button>
+<button onclick="moveup();">move up</button>
+<script>
+
+function AnimationObject(cssid){
+  var _dx;
+  var _dy;
+  this.left = function(){
+    var objpos = $(cssid).offset();
+    console.log (cssid +'.left()=> ' + objpos.left);
+    return objpos.left;
+  };
+
+  this.right = function(){
+    var objpos = $(cssid).offset();
+    var left = objpos.left;
+    var width = $(cssid).width();
+    var right = left + width;
+    console.log (cssid +'.right()=> ' + right);
+    return right;
+  };
+
+  this.top = function(){
+    var objpos = $(cssid).offset();
+    console.log (cssid +'.top()=> ' + objpos.top);
+    return objpos.top;
+  };
+
+  this.bottom = function(){
+    var objpos = $(cssid).offset();
+    var height = $(cssid).height();
+    var bottom = objpos.top + height;
+    console.log (cssid +'.bottom()=> ' + bottom);
+    return bottom;
+  };
+  
+  
+  this.move = function(dx, dy){
+    this._dx = dx;
+    this._dy = dy;
+    var hit = this.wallhit();
+    var objpos = $(cssid).offset();
+    objpos.left = objpos.left + this._dx;
+    objpos.top = objpos.top + this._dy;
+    $(cssid).css({ top: objpos.top+'px', left: objpos.left+'px' });
+    console.log ('moving: ' + cssid + ' dx: ' + dx + ' dy: ' + dy);
+  };
+  this.screenhit = function (dx, dy){
+    var hit = false;
+    var pos = $(cssid).offset();
+    var width = $(cssid).width();
+    var height = $(cssid).height();
+    var left = pos.left;
+    var top = pos.top;
+    var right = left + width;
+    var bottom = top + height;
+    
+    var potential_left = left + dx;
+    if (potential_left < 0){
+      hit = true;
+    }
+    var potential_top = top + dy;
+    if (potential_top < 0){
+      hit = true;
+    }
+    return hit;
+    
+  };
+  
+  this.wallhit = function (){
+    var hit = false;
+    var ballpos = $(cssid).offset();
+    var ballwidth = $(cssid).width();
+    var ballheight = $(cssid).height();
+    var ballleft = ballpos.left + this._dx;
+    var balltop = ballpos.top + this._dy;
+    var ballright = ballleft + ballwidth;
+    var ballbottom = balltop + ballheight;
+
+    
+    var wallpos = $('#wall').offset();
+    var wallwidth = $('#wall').width();
+    var wallheight = $('#wall').height();
+    var wallleft = wallpos.left;
+    var walltop = wallpos.top;
+    var wallright = wallleft + wallwidth;
+    var wallbottom = walltop + wallheight;
+    
+    //is the ball right about to hit the wall left
+    if(ballright > wallleft && ballbottom > walltop && balltop < wallbottom && ballleft < wallright){
+      hit = true;
+      console.log ('hit');
+    }
+    if (hit == true){
+      //left side
+      if(ballleft < wallleft && balltop > walltop && ballbottom < wallbottom){
+        this._dx = -this._dx;
+        console.log ('left side');
+      }
+      //right side
+      if(ballright > wallright && balltop > walltop && ballbottom < wallbottom){
+        this._dx = -this._dx;
+        console.log ('right side');
+      }
+    
+    }
+    //is the ball bottom about to hit the wall top
+    return hit;
+  };
+}
+
+var redballobj = new AnimationObject("#redball");
+
+function ObstacleObject(cssid){
+  this.left = function(){
+    var objpos = $(cssid).offset();
+    console.log (cssid +'.left()=> ' + objpos.left);
+    return objpos.left;
+  };
+
+  this.right = function(){
+    var objpos = $(cssid).offset();
+    var left = objpos.left;
+    var width = $(cssid).width();
+    var right = left + width;
+    console.log (cssid +'.right()=> ' + right);
+    return right;
+  };
+
+  this.top = function(){
+    var objpos = $(cssid).offset();
+    console.log (cssid +'.top()=> ' + objpos.top);
+    return objpos.top;
+  };
+
+  this.bottom = function(){
+    var objpos = $(cssid).offset();
+    var height = $(cssid).height();
+    var bottom = objpos.top + height;
+    console.log (cssid +'.bottom()=> ' + bottom);
+    return bottom;
+  };
+}
+
+var wallObj = new ObstacleObject("#wall");
+function moveright(){
+  redballobj.move(40,0);
+}
+
+function moveleft(){
+  redballobj.move(-40,0);
+}
+
+function movedown(){
+  redballobj.move(0,40);
+}
+function moveup(){
+  redballobj.move(0,-40);
+}
+
+</script>
+
+</body>
+</html>
