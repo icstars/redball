@@ -121,7 +121,7 @@ function Game(){
         var wallright = this.obstacles[i].right();
         var wallbottom = this.obstacles[i].bottom();
       
-         //is the ball right about to hit the wall left
+         //is the ball is about to hit the wall
         if(ballright > wallleft && ballbottom > walltop && balltop < wallbottom && ballleft < wallright){
           hit = true;
         }
