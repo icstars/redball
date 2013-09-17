@@ -8,60 +8,44 @@ top: 100px;
 }
 </style>
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
-<script>
-function myfirstobject(){
-  this.sayhello = function (){
-    alert ('hello world');
-  }
-}
 
-function AnimationObject(cssid){
-  this.whoareyou = function(){
-    alert("I am " + cssid);
-  };
-  this.move = function (dx, dy){
-    var pos = $(cssid).offset();
-    pos.left = pos.left + dx;
-    pos.top = pos.top + dy;
-    if(pos.left < 0){
-        //bumped left side of screen
-        pos.left = pos.left - dx;
-    }
-    $(cssid).css({ top: pos.top+'px', left: pos.left+'px' });
-  }
-  
-  this.screenedgetest = function(){
-    var hit = false;
-
-    var pos = $(cssid).offset();
-    var width = $(cssid).width();
-    var height = $(cssid).height();
-    var left = pos.left;
-    var top = pos.top;
-    var right = left + width;
-    
-    if (left < 0){
-      hit = true;
-    }
-    if (right > screen.width){
-      hit = true;
-    }
-    return hit;
-  }
-
-}
-
-var me = new myfirstobject();
-var redballobj = new AnimationObject("#redball");
-
-</script>
 </head>
 <body>
 <img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
-<button onclick="me.sayhello();">say hello</button>
-<button onclick="redballobj.whoareyou();">who are you?</button>
-<button onclick="redballobj.move(10, 10);">move down right</button>
-<button onclick="redballobj.move(-10, 10);">move down left</button>
-<button onclick="redballobj.move(0, -10);">move up</button>
+<button onclick="redballobj.fadeOut();">Fade Out Using Animation Object</button>
+<button onclick="stretch();">stretch</button>
+<button onclick="fadeOut();">fade out</button>
+<button onclick="fadeIn();">fade in</button>
 </body>
+<script>
+		
+var redballobj;
+		
+function fadeOut(){
+	$("#redball").fadeOut();
+}
+		
+function fadeIn(){
+	$("#redball").fadeIn();
+}
+
+function stretch(){
+	$("#redball").width(500);	
+}
+			
+function AnimationObject(cssid){
+  this.fadeOut=function(){
+		$("#redball").fadeOut();
+	};			
+}
+			
+			
+$(document).ready(function(){
+	redballobj=new AnimationObject("#redball");
+});
+
+console.log("document ready ran");
+
+  
+</script>
 </html>
