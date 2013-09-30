@@ -1,12 +1,13 @@
 <html>
 <head>
 <style>
-#redball{
-position: absolute;
-left: 90px;
-top: 100px;
-}
+  #redball{
+    position: absolute;
+    left: 90px;
+    top: 100px;
+  }
 </style>
+
 <script src="http://code.jquery.com/jquery-1.8.3.js"></script>
 
 </head>
@@ -20,11 +21,9 @@ top: 100px;
 <button onclick="redballobj.move(0,3);">Move Down</button>
 <button onclick="redballobj.move(0,-3);">Move Up</button>
 <button onclick="redballobj.move(3,0);">Move Right</button>
-
-  
 </body>
+
 <script>
-		
 var redballobj;
 		
 function fadeOut(){
@@ -44,21 +43,20 @@ function AnimationObject(cssid){
 		$("#redball").fadeOut();
 	};
 	this.move=function(dx,dy){
-	  console.log("distance across is " + dx);
-	  console.log("distance up/down is " + dy);
-	  var offset = $("#redball").offset();
-	    offset.left=offset.left + dx;
-	    offset.top=offset.top + dy;
-	    $("#redball").css({top:offset.top + 'px', left:offset.left + 'px'})
-	}
+    console.log("distance across is " + dx);
+    console.log("distance up/down is " + dy);
+    var offset = $("#redball").offset();
+    offset.left=offset.left + dx;
+    offset.top=offset.top + dy;
+    $("#redball").css({top:offset.top + 'px', left:offset.left + 'px'})
+  }
 }
-			
 			
 $(document).ready(function(){
 	redballobj=new AnimationObject("#redball");
+  console.log("document ready ran");
 });
 
-console.log("document ready ran");
 
   
 </script>
