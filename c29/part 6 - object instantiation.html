@@ -1,0 +1,87 @@
+<html>
+<head>
+<style>
+  #redball{
+    position: absolute;
+    left: 90px;
+    top: 100px;
+  }
+  #greenball{
+    position: absolute;
+    left: 190px;
+    top: 200px;
+  }
+</style>
+
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+
+</head>
+<body>
+<img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
+<img id='greenball' src='http://www.icstars.org/files/greenball.jpg'/>
+
+<button onclick="redballobj.fadeOut();">Fade Out Using Animation Object</button>
+<button onclick="stretch();">stretch</button>
+<button onclick="fadeOut();">fade out</button>
+<button onclick="fadeIn();">fade in</button>
+<button onclick="redballobj.move(-3,0);">Move Left</button>
+<button onclick="redballobj.move(0,3);">Move Down</button>
+<button onclick="redballobj.move(0,-3);">Move Up</button>
+<button onclick="redballobj.move(3,0);">Move Right</button>
+<br>
+<button onclick="greenballobj.move(-3,0);">Gren Move Left</button>
+<button onclick="greenballobj.move(0,3);">Green Move Down</button>
+<button onclick="greenballobj.move(0,-3);">Green Move Up</button>
+<button onclick="greenballobj.move(3,0);">Green Move Right</button>
+
+</body>
+
+<script>
+var redballobj;
+		
+function fadeOut(){
+	$("#redball").fadeOut();
+}
+		
+function fadeIn(){
+	$("#redball").fadeIn();
+}
+
+function stretch(){
+	$("#redball").width(500);	
+}
+			
+function AnimationObject(cssid){
+  this.fadeOut=function(){
+		$(cssid).fadeOut();
+	};
+  this.move=function(dx,dy){
+    console.log("distance across is " + dx);
+    console.log("distance up/down is " + dy);
+    var offset = $(cssid).offset();
+    offset.left=offset.left + dx;
+    offset.top=offset.top + dy;
+    if (offset.left < 0)
+      console.log ('left wall hit');
+    else
+      $(cssid).css({top:offset.top + 'px', left:offset.left + 'px'});
+
+      
+    if (offset.left > $(document).width())
+      console.log ('right wall hit');
+    else
+      $(cssid).css({top:offset.top + 'px', left:offset.left + 'px'});
+
+  }
+}
+			
+$(document).ready(function(){
+	greenballobj=new AnimationObject("#greenball");
+	redballobj=new AnimationObject("#redball");
+  console.log("document ready ran");
+});
+
+
+  
+</script>
+</html>

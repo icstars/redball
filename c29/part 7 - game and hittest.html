@@ -1,0 +1,149 @@
+<html>
+<head>
+<style>
+  #redball{
+    position: absolute;
+    left: 90px;
+    top: 100px;
+  }
+  #greenball{
+    position: absolute;
+    left: 190px;
+    top: 200px;
+  }
+</style>
+
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+
+</head>
+<body>
+<img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
+<img id='greenball' src='http://www.icstars.org/files/greenball.jpg'/>
+
+<button onclick="redballobj.fadeOut();">Fade Out Using Animation Object</button>
+<button onclick="stretch();">stretch</button>
+<button onclick="fadeOut();">fade out</button>
+<button onclick="fadeIn();">fade in</button>
+<button onclick="redballobj.move(-3,0);">Move Left</button>
+<button onclick="redballobj.move(0,3);">Move Down</button>
+<button onclick="redballobj.move(0,-3);">Move Up</button>
+<button onclick="redballobj.move(3,0);">Move Right</button>
+<br>
+<button onclick="greenballobj.move(-3,0);">Gren Move Left</button>
+<button onclick="greenballobj.move(0,3);">Green Move Down</button>
+<button onclick="greenballobj.move(0,-3);">Green Move Up</button>
+<button onclick="greenballobj.move(3,0);">Green Move Right</button>
+
+</body>
+
+<script>
+var redballobj;
+var greenballobj;
+var thegame;
+		
+function AnimationObject(cssid){
+  //session 7
+  var dx;
+  var dy;
+  
+  this.fadeOut=function(){
+		$(cssid).fadeOut();
+	};
+
+  this.move=function(dx,dy){
+    console.log("distance across is " + dx);
+    console.log("distance up/down is " + dy);
+    var offset = $(cssid).offset();
+    this.dx = dx;
+    this.dy = dy;
+    var collision = false;
+    
+    //session 7
+    if ((offset.left + dx)< 0){
+      console.log ('left wall hit');
+      collision = true;
+    }
+    else if ((offset.left + dx) > $(document).width()){
+      console.log ('right wall hit');
+      collision = true;
+    }
+    else if (thegame.hittest(redballobj, greenballobj) == true){
+      console.log ('red and green collided');
+      collision = true;
+    }
+
+    if (!collision){
+      offset.left=offset.left + dx;
+      offset.top=offset.top + dy;
+      $(cssid).css({top:offset.top + 'px', left:offset.left + 'px'});
+    }
+  };
+  
+  this.left = function(){
+    var objpos = $(cssid).offset();
+    console.log (cssid +'.left()=> ' + objpos.left);
+    return objpos.left;
+  };
+
+  this.right = function(){
+    var objpos = $(cssid).offset();
+    var left = objpos.left;
+    var width = $(cssid).width();
+    var right = left + width;
+    console.log (cssid +'.right()=> ' + right);
+    return right;
+  };
+
+  this.top = function(){
+    var objpos = $(cssid).offset();
+    console.log (cssid +'.top()=> ' + objpos.top);
+    return objpos.top;
+  };
+
+  this.bottom = function(){
+    var objpos = $(cssid).offset();
+    var height = $(cssid).height();
+    var bottom = objpos.top + height;
+    console.log (cssid +'.bottom()=> ' + bottom);
+    return bottom;
+  };
+}
+			
+  //session 7
+function GameObject(){
+
+  this.hittest = function (obj1, obj2){
+    var hit = false;
+    var obj1left = obj1.left() + obj1.dx;
+    var obj1top = obj1.top() + obj1.dy;
+    var obj1right = obj1.right() + obj1.dx;
+    var obj1bottom = obj1.bottom() + obj1.dy;
+
+    var obj2left = obj2.left();
+    var obj2top = obj1.top();
+    var obj2right = obj1.right();
+    var obj2bottom = obj1.bottom();
+    
+    if(obj1right > obj2left && obj1bottom > obj2top && obj1top < obj2bottom && obj1left < obj2right){
+      hit = true;
+    }
+    else{
+      console.log ('no hit');
+    }
+    
+    return hit;
+    
+  }
+}
+$(document).ready(function(){
+	greenballobj=new AnimationObject("#greenball");
+	redballobj=new AnimationObject("#redball");
+  //session 7
+  thegame = new GameObject();
+  console.log("document ready ran");
+});
+
+
+  
+</script>
+</html>
