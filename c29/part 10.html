@@ -40,12 +40,17 @@
 var redballobj;
 var greenballobj;
 var thegame;
+
+//session 10
+function Point(){
+    var x;
+    var y;
+  }
 		
 function AnimationObject(cssid){
-  //session 7
   var dx;
   var dy;
-  this.id = cssid;
+  this.cssid = cssid;
   
   this.fadeOut=function(){
 		$(cssid).fadeOut();
@@ -57,12 +62,28 @@ function AnimationObject(cssid){
     var offset = $(cssid).offset();
     this.dx = dx;
     this.dy = dy;
-    var collision = false;
     
-    if (thegame.checkhit(this) == true){
-      collision = true;
+    //session 10
+    var collision = thegame.checkhit(this);
+    if (collision == 'nohit'){
+      offset.left=offset.left + dx;
+      offset.top=offset.top + dy;
+      $(cssid).css({top:offset.top + 'px', left:offset.left + 'px'});
     }
-
+    else if (collision == 'leftorright')
+    {
+      dx = -dx;
+      offset.left=offset.left + dx;
+      offset.top=offset.top + dy;
+      $(cssid).css({top:offset.top + 'px', left:offset.left + 'px'});
+    }
+    else if (collision == 'toporbottom')
+    {
+      dy = -dy;
+      offset.left=offset.left + dx;
+      offset.top=offset.top + dy;
+      $(cssid).css({top:offset.top + 'px', left:offset.left + 'px'});
+    }
   };
   
   this.left = function(){
@@ -93,9 +114,22 @@ function AnimationObject(cssid){
     console.log (cssid +'.bottom()=> ' + bottom);
     return bottom;
   };
+
+//session 10  
+  this.__defineGetter__("center", function(){
+    var centerpoint = new Point();
+    var objpos = $(cssid).offset();
+    var left = objpos.left;
+    var top = objpos.top;
+    var width = $(cssid).width();
+    var height = $(cssid).height();
+    centerpoint.x = left + (width / 2);
+    centerpoint.y = top + (height / 2);
+    return centerpoint;
+  });
+  
 }
 			
-  //session 7
 function GameObject(){
 
   //when a gameobject is created, it also creates an objects array that can be added to
@@ -105,17 +139,41 @@ function GameObject(){
   //this function also utilizes a loop of all objects the game knows about. its important to skip itself in that loop
   this.checkhit = function(obj){
     var hit = false;
-    console.log ('checkhit for cssid: ' + obj.id);
+    //session 10
+    var retval = "nohit";
+
+    console.log ('checkhit for cssid: ' + obj.cssid);
     for (i=0;i<this.objects.length;i++){
-      hit = this.hittest(obj, this.objects[i]);
-      if (hit){
-        console.log ('hit: ' + this.objects[i].id);  
-        break;
+      //don't check self
+      
+      if(obj.cssid != this.objects[i].cssid){
+        hit = this.hittest(obj, this.objects[i]);
+        if (hit){
+          console.log ('hit: ' + this.objects[i].cssid);  
+          //session 10
+          retval = this.collisionside(obj, this.objects[i]);
+          break;
+        }
+      }
+      else{
+        console.log ('skipping self hittest: ' + this.objects[i].cssid);  
       }
     }
-    return hit;
+    
+    return retval;
   }
   
+  //session 10
+  this.collisionside = function (obj1, obj2){
+    var retval;
+    if(Math.abs(obj1.center.x - obj2.center.x) >= Math.abs(obj1.center.y - obj2.center.y)){
+      retval = 'leftorright';
+    }
+    else{
+      retval = 'toporbottom';
+    }
+    return retval;
+  };
   
   this.hittest = function (obj1, obj2){
     var hit = false;

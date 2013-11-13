@@ -45,7 +45,7 @@ function AnimationObject(cssid){
   //session 7
   var dx;
   var dy;
-  this.id = cssid;
+  this.cssid = cssid;
   
   this.fadeOut=function(){
 		$(cssid).fadeOut();
@@ -59,10 +59,28 @@ function AnimationObject(cssid){
     this.dy = dy;
     var collision = false;
     
-    if (thegame.checkhit(this) == true){
+    //session 9
+    if ((offset.left + dx)< 0){
+      console.log ('left wall hit');
+      collision = true;
+    }
+    else if ((offset.left + dx) > $(document).width()){
+      console.log ('right wall hit');
+      collision = true;
+    }
+    else if (thegame.checkhit(this) == true){
+      console.log ('hit something');
       collision = true;
     }
 
+    if (!collision){
+      offset.left=offset.left + dx;
+      offset.top=offset.top + dy;
+      $(cssid).css({top:offset.top + 'px', left:offset.left + 'px'});
+    }
+    else{
+    
+    }
   };
   
   this.left = function(){
@@ -105,12 +123,19 @@ function GameObject(){
   //this function also utilizes a loop of all objects the game knows about. its important to skip itself in that loop
   this.checkhit = function(obj){
     var hit = false;
-    console.log ('checkhit for cssid: ' + obj.id);
+    console.log ('checkhit for cssid: ' + obj.cssid);
     for (i=0;i<this.objects.length;i++){
-      hit = this.hittest(obj, this.objects[i]);
-      if (hit){
-        console.log ('hit: ' + this.objects[i].id);  
-        break;
+      //don't check self
+      
+      if(obj.cssid != this.objects[i].cssid){
+        hit = this.hittest(obj, this.objects[i]);
+        if (hit){
+          console.log ('hit: ' + this.objects[i].cssid);  
+          break;
+        }
+      }
+      else{
+        console.log ('skipping self hittest: ' + this.objects[i].cssid);  
       }
     }
     return hit;
