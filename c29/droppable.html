@@ -17,7 +17,11 @@
 <script>
 $(document).ready(function(){
 $( "#redball" ).draggable();
-$( "#greenball" ).droppable();
+$( "#greenball" ).droppable({
+      drop: function( event, ui ) {
+        ui.draggable.hide();
+      }
+    });
 
 }
 </script>
