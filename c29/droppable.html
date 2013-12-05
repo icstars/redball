@@ -20,6 +20,7 @@ $(function() {
 $( "#redball" ).draggable({ 
     revert: "invalid",
     zIndex: 2500
+        //zindex keeps it on top - http://stackoverflow.com/questions/6311475/jquery-ui-draggable-element-always-on-top
     });
 $( "#greenball" ).draggable();
 $( "#greenball" ).droppable({
