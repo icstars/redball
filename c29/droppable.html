@@ -17,7 +17,8 @@
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script>
 $(function() {
-$( "#redball" ).draggable();
+$( "#redball" ).draggable({ revert: invalid });
+$( "#greenball" ).draggable();
 $( "#greenball" ).droppable({
       drop: function( event, ui ) {
         alert('dropped');
