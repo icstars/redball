@@ -1,0 +1,42 @@
+<html>
+<head>
+<style>
+#redball{
+position: absolute;
+left: 90px;
+top: 100px;
+}
+</style>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script>
+function moveright(){
+  var elem = $("#redball");
+  var pos = elem.offset();
+  pos.left = pos.left + 20;
+  //elem.css({ top: pos.top+'px', left: pos.left+'px' });
+  elem.css({ left: pos.left+'px' });
+}
+function grow(){
+	var elem = $("#mytitle");
+	elem.css("font-size","25px");
+}
+function fadeout(){
+	var elem = $("#mytitle");
+	elem.fadeOut();
+}
+function fadein(){
+	var elem = $("#mytitle");
+	elem.fadeIn();
+}
+
+</script>
+</head>
+<body>
+<p id="mytitle">The Title //ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js</p>
+<img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
+<button onclick="moveright();">move right</button>
+<button onclick="grow();">grow</button>
+<button onclick="fadeout();">fade out</button>
+<button onclick="fadein();">fade in</button>
+</body>
+</html>
