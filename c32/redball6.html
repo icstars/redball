@@ -23,9 +23,13 @@ function movedown(){
 }
 function moveup(){
   var elem = $("#redball");
-  elem.animate({ "top": "-=10px" }, 10, "linear");
+  var offset = elem.offset();
+  if (offset.top > 0){
+    elem.animate({ "top": "-=10px" }, 10, "linear");
+  }
 }
 function moveupright(){
+  //todo: add offset and if code to prevent going off top or right of screen
   var elem = $("#redball");
   elem.animate({ "left": "+=10px", "top":"-=10px" }, 10, "linear");
 }
@@ -92,6 +96,7 @@ function diamond(){
 <body>
 <p id="mytitle">The Title //ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js</p>
 <img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
+<button onclick="moveup();">move up</button>
 <button onclick="moveright();">move right</button>
 <button onclick="movedown();">move down</button>
 <button onclick="moveupright();">move upright</button>
