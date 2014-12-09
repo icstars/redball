@@ -9,13 +9,70 @@ top: 100px;
 </style>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script>
+    window.requestAnimFrame = (function(){
+      return  window.requestAnimationFrame       || 
+              window.webkitRequestAnimationFrame || 
+              window.mozRequestAnimationFrame    || 
+              window.oRequestAnimationFrame      || 
+              window.msRequestAnimationFrame     || 
+              function(/* function */ callback, /* DOMElement */ element){
+                window.setTimeout(callback, 1000 / 60);
+              };
+    })();
+function animate() {    
+    requestAnimFrame( animate );
+    repaint();
+}
+//animate();
+function repaint(){
+    $(window).trigger('resize');
+    console.log('resize');
+}
+
+jQuery.fn.redraw = function() {
+    return this.hide(0,function() {$(this).show(1000);});
+};
 function moveright(){
+    console.log('right');
+  var elem = $("#redball");
+  
+  //var pos = elem.offset();
+  //pos.left = pos.left + 20;
+  elem.animate({ "left": "+=10px" }, 10, "linear");
+  //elem.css({ top: pos.top+'px', left: pos.left+'px' });
+  //elem.css({ left: pos.left+'px' });
+  //  $(window).trigger('resize');
+  //elem.redraw();
+}
+function movedown(){
+    console.log('down');
   var elem = $("#redball");
   var pos = elem.offset();
-  pos.left = pos.left + 20;
+  pos.top = pos.top + 20;
   //elem.css({ top: pos.top+'px', left: pos.left+'px' });
-  elem.css({ left: pos.left+'px' });
+  
+  //elem.css({ top: pos.top+'px' });
+  //elem.redraw();
+  elem.animate({ "top": "+=10px" }, 10, "linear");
+  
 }
+function moveupright(){
+  var elem = $("#redball");
+  elem.animate({ "left": "+=10px", "top":"-=10px" }, 10, "linear");
+}
+function moveupleft(){
+  var elem = $("#redball");
+  elem.animate({ "left": "-=10px", "top":"-=10px" }, 10, "linear");
+}
+function movedownright(){
+  var elem = $("#redball");
+  elem.animate({ "left": "+=10px", "top":"+=10px" }, 10, "linear");
+}
+function movedownleft(){
+  var elem = $("#redball");
+  elem.animate({ "left": "-=10px", "top":"+=10px" }, 10, "linear");
+}
+
 function grow(){
 	var elem = $("#mytitle");
 	elem.css("font-size","25px");
@@ -29,14 +86,44 @@ function fadein(){
 	elem.fadeIn();
 }
 
+function rectangle(){
+    for (var i=0;i<20;i++){
+        moveright();
+    }
+    for (var i=0;i<20;i++){
+        movedown();
+    }
+    
+}
+
+function diamond(){
+    
+    for (var i=0;i<10;i++){
+        moveupright();
+    }
+    for (var i=0;i<10;i++){
+        movedownright();
+    }
+    for (var i=0;i<10;i++){
+        movedownleft();
+    }
+    for (var i=0;i<10;i++){
+        moveupleft();
+    }
+    
+}
 </script>
 </head>
 <body>
 <p id="mytitle">The Title //ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js</p>
 <img id='redball' src='http://www.icstars.org/files/redball.jpg'/>
 <button onclick="moveright();">move right</button>
+<button onclick="movedown();">move down</button>
+<button onclick="moveupright();">move upright</button>
 <button onclick="grow();">grow</button>
 <button onclick="fadeout();">fade out</button>
 <button onclick="fadein();">fade in</button>
+<button onclick="rectangle();">rectangle</button>
+<button onclick="diamond();">diamond</button>
 </body>
 </html>
