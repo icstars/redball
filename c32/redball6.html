@@ -9,52 +9,21 @@ top: 100px;
 </style>
 <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script>
-    window.requestAnimFrame = (function(){
-      return  window.requestAnimationFrame       || 
-              window.webkitRequestAnimationFrame || 
-              window.mozRequestAnimationFrame    || 
-              window.oRequestAnimationFrame      || 
-              window.msRequestAnimationFrame     || 
-              function(/* function */ callback, /* DOMElement */ element){
-                window.setTimeout(callback, 1000 / 60);
-              };
-    })();
-function animate() {    
-    requestAnimFrame( animate );
-    repaint();
-}
-//animate();
-function repaint(){
-    $(window).trigger('resize');
-    console.log('resize');
-}
-
-jQuery.fn.redraw = function() {
-    return this.hide(0,function() {$(this).show(1000);});
-};
 function moveright(){
-    console.log('right');
   var elem = $("#redball");
-  
-  //var pos = elem.offset();
-  //pos.left = pos.left + 20;
   elem.animate({ "left": "+=10px" }, 10, "linear");
-  //elem.css({ top: pos.top+'px', left: pos.left+'px' });
-  //elem.css({ left: pos.left+'px' });
-  //  $(window).trigger('resize');
-  //elem.redraw();
+}
+function moveleft(){
+  var elem = $("#redball");
+  elem.animate({ "left": "-=10px" }, 10, "linear");
 }
 function movedown(){
-    console.log('down');
   var elem = $("#redball");
-  var pos = elem.offset();
-  pos.top = pos.top + 20;
-  //elem.css({ top: pos.top+'px', left: pos.left+'px' });
-  
-  //elem.css({ top: pos.top+'px' });
-  //elem.redraw();
   elem.animate({ "top": "+=10px" }, 10, "linear");
-  
+}
+function moveup(){
+  var elem = $("#redball");
+  elem.animate({ "top": "-=10px" }, 10, "linear");
 }
 function moveupright(){
   var elem = $("#redball");
@@ -87,11 +56,17 @@ function fadein(){
 }
 
 function rectangle(){
-    for (var i=0;i<20;i++){
+    for (var i=0;i<50;i++){
         moveright();
     }
     for (var i=0;i<20;i++){
         movedown();
+    }
+    for (var i=0;i<50;i++){
+        moveleft();
+    }
+    for (var i=0;i<20;i++){
+        moveup();
     }
     
 }
